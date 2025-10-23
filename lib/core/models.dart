@@ -6,19 +6,21 @@ class ChatMessage {
   ChatMessage({
     required this.role,
     required this.content,
-    required this.timestamp,
-  });
+    DateTime? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'role': role,
+      'content': content,
+    };
+  }
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
       role: json['role'],
       content: json['content'],
-      timestamp: DateTime.now(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'role': role, 'content': content};
   }
 }
 
@@ -26,7 +28,10 @@ class ChatRequest {
   final String message;
   final List<ChatMessage> history;
 
-  ChatRequest({required this.message, this.history = const []});
+  ChatRequest({
+    required this.message,
+    this.history = const [],
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -42,6 +47,8 @@ class ChatResponse {
   ChatResponse({required this.answer});
 
   factory ChatResponse.fromJson(Map<String, dynamic> json) {
-    return ChatResponse(answer: json['answer']);
+    return ChatResponse(
+      answer: json['answer'],
+    );
   }
 }
