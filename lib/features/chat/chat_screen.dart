@@ -19,13 +19,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkConnection();
     });
-  }
-
-  void _checkConnection() async {
-    final controller = context.read<ChatController>();
-    // Puedes agregar aquí una verificación de conexión si lo deseas
   }
 
   void _scrollToBottom() {
