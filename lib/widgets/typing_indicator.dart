@@ -6,6 +6,8 @@ class TypingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
@@ -18,30 +20,37 @@ class TypingIndicator extends StatelessWidget {
           vertical: 12,
         ),
         decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: theme.colorScheme.surface,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
           border: Border.all(
-            color: Colors.grey.shade400,
+            color: theme.colorScheme.outline.withOpacity(0.3),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             SpinKitThreeBounce(
               size: 16,
-              color: Colors.grey.shade600,
+              color: theme.colorScheme.primary,
             ),
             const SizedBox(width: 12),
             Text(
               'Preparando respuesta...',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey.shade600,
+                color: theme.colorScheme.onSurface.withOpacity(0.7),
                 fontStyle: FontStyle.italic,
               ),
             ),

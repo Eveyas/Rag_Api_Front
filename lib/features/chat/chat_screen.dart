@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'chat_controller.dart';
+import '../../core/theme_controller.dart';
 import '../../widgets/message_bubble.dart';
 import '../../widgets/input_bar.dart';
 import '../../widgets/typing_indicator.dart';
@@ -34,14 +36,31 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeController = context.watch<ThemeController>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chatbot RAG'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: Icon(
+              themeController.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
+            onPressed: () {
+              themeController.toggleTheme();
+            },
+            tooltip: themeController.isDarkMode
+                ? 'Cambiar a tema claro'
+                : 'Cambiar a tema oscuro',
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.refresh,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
             onPressed: () {
               context.read<ChatController>().clearChat();
             },
@@ -49,37 +68,54 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<ChatController>(
-              builder: (context, controller, child) {
-                // Scroll al final cuando hay nuevos mensajes
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _scrollToBottom();
-                });
+      body: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Column(
+          children: [
+            Expanded(
+              child: Consumer<ChatController>(
+                builder: (context, controller, child) {
+                  // Scroll al final cuando hay nuevos mensajes
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _scrollToBottom();
+                  });
 
-                return ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.all(16),
-                  itemCount: controller.messages.length +
-                      (controller.isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index < controller.messages.length) {
-                      final message = controller.messages[index];
-                      return MessageBubble(
-                        message: message,
+                  // Mostrar error si existe
+                  if (controller.error != null) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(controller.error!),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                        ),
                       );
-                    } else {
-                      return const TypingIndicator();
-                    }
-                  },
-                );
-              },
+                      controller.clearError();
+                    });
+                  }
+
+                  return ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(16),
+                    itemCount: controller.messages.length +
+                        (controller.isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index < controller.messages.length) {
+                        final message = controller.messages[index];
+                        return MessageBubble(
+                          message: message,
+                        );
+                      } else {
+                        return const TypingIndicator();
+                      }
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          const InputBar(),
-        ],
+            const InputBar(),
+          ],
+        ),
       ),
     );
   }

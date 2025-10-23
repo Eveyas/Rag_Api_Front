@@ -21,6 +21,7 @@ class ChatController with ChangeNotifier {
 
     // Limpiar error previo
     _error = null;
+    notifyListeners();
 
     // Agregar mensaje del usuario
     final userMessage = ChatMessage(
@@ -47,7 +48,8 @@ class ChatController with ChangeNotifier {
       // Agregar mensaje de error
       final errorMessage = ChatMessage(
         role: 'assistant',
-        content: 'Lo siento, hubo un error: $e',
+        content:
+            'Lo siento, hubo un error al procesar tu solicitud. Por favor, intenta de nuevo.',
       );
       _messages.add(errorMessage);
     } finally {

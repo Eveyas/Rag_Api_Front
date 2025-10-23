@@ -13,6 +13,7 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUser = message.role == 'user';
+    final theme = Theme.of(context);
 
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -26,7 +27,9 @@ class MessageBubble extends StatelessWidget {
           vertical: 12,
         ),
         decoration: BoxDecoration(
-          color: isUser ? Colors.blue.shade100 : Colors.grey.shade200,
+          color: isUser
+              ? theme.colorScheme.primary.withOpacity(0.8)
+              : theme.colorScheme.surface,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -36,9 +39,18 @@ class MessageBubble extends StatelessWidget {
                 isUser ? const Radius.circular(4) : const Radius.circular(16),
           ),
           border: Border.all(
-            color: isUser ? Colors.blue.shade300 : Colors.grey.shade400,
+            color: isUser
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outline.withOpacity(0.3),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,14 +61,14 @@ class MessageBubble extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey.shade600,
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
                 ),
               ),
             Text(
               message.content,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey.shade800,
+                color: isUser ? Colors.white : theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 4),
@@ -64,7 +76,9 @@ class MessageBubble extends StatelessWidget {
               _formatTime(message.timestamp),
               style: TextStyle(
                 fontSize: 10,
-                color: Colors.grey.shade500,
+                color: (isUser
+                    ? Colors.white70
+                    : theme.colorScheme.onSurface.withOpacity(0.5)),
               ),
             ),
           ],

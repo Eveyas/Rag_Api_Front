@@ -24,57 +24,80 @@ class _InputBarState extends State<InputBar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Consumer<ChatController>(
       builder: (context, controller, child) {
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.colorScheme.surface,
             border: Border(
               top: BorderSide(
-                color: Colors.grey.shade300,
+                color: theme.colorScheme.outline.withOpacity(0.2),
                 width: 1,
               ),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, -2),
+              ),
+            ],
           ),
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _textController,
-                  focusNode: _focusNode,
-                  decoration: InputDecoration(
-                    hintText: 'Escribe tu pregunta...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.background,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: theme.colorScheme.outline.withOpacity(0.3),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    enabled: !controller.isLoading,
                   ),
-                  onSubmitted: (_) => _sendMessage(),
+                  child: TextField(
+                    controller: _textController,
+                    focusNode: _focusNode,
+                    decoration: InputDecoration(
+                      hintText: 'Escribe tu pregunta...',
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      enabled: !controller.isLoading,
+                    ),
+                    onSubmitted: (_) => _sendMessage(),
+                    style: TextStyle(
+                      color: theme.colorScheme.onBackground,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue,
+                  color: theme.colorScheme.primary,
                 ),
                 child: IconButton(
                   icon: controller.isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              theme.colorScheme.onPrimary,
+                            ),
                           ),
                         )
-                      : const Icon(Icons.send, color: Colors.white),
+                      : Icon(
+                          Icons.send,
+                          color: theme.colorScheme.onPrimary,
+                        ),
                   onPressed: controller.isLoading ? null : _sendMessage,
                 ),
               ),
