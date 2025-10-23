@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'chat_controller.dart';
 import '../../core/theme_controller.dart';
 import '../../widgets/message_bubble.dart';
@@ -80,7 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     _scrollToBottom();
                   });
 
-                  // Mostrar error si existe
+                  // Mostrar error
                   if (controller.error != null) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       ScaffoldMessenger.of(context).showSnackBar(

@@ -4,11 +4,9 @@ import 'core/api_client.dart';
 import 'core/theme_controller.dart';
 import 'features/chat/chat_controller.dart';
 import 'features/chat/chat_screen.dart';
-
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

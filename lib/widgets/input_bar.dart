@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../features/chat/chat_controller.dart';
 
 class InputBar extends StatefulWidget {

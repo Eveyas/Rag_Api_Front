@@ -20,7 +20,7 @@ class ApiClient {
 
   String _getBaseUrl() {
     // Detectar si estamos en web
-    bool isWeb = identical(0, 0.0); // Hack para detectar web en Flutter
+    bool isWeb = identical(0, 0.0);
 
     if (isWeb) {
       return 'http://localhost:8000'; // Para desarrollo web

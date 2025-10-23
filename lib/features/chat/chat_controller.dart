@@ -19,7 +19,7 @@ class ChatController with ChangeNotifier {
   Future<void> sendMessage(String message) async {
     if (message.trim().isEmpty || _isLoading) return;
 
-    // Limpiar error previo
+    // Limpiar el error previo
     _error = null;
     notifyListeners();
 
@@ -36,7 +36,7 @@ class ChatController with ChangeNotifier {
       // Llamar a la API
       final response = await _chatRepository.ask(message, _messages);
 
-      // Agregar respuesta del asistente
+      // Agregar la respuesta del asistente
       final assistantMessage = ChatMessage(
         role: 'assistant',
         content: response,
@@ -45,7 +45,7 @@ class ChatController with ChangeNotifier {
     } catch (e) {
       _error = e.toString();
 
-      // Agregar mensaje de error
+      // Agregar un mensaje de error
       final errorMessage = ChatMessage(
         role: 'assistant',
         content:
